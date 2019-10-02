@@ -1,4 +1,3 @@
-
 function ajax(resolve, reject, url) {
     const xhr = new XMLHttpRequest();
         xhr.open('GET', url);
@@ -16,23 +15,27 @@ function getDataPromise(url) {
 function getData(url) {
         const dt = getDataPromise(url);
         dt.then( (data) => {
-            console.log(data.currentTarget.response)
+            console.log(data.currentTarget.response);
             mygen.next();
         }, (err) => {
             console.log(err);
         })
 }
 
-function* getDataGenerator() {
-        getData('https://jsonplaceholder.typicode.com/users')
-    yield
-        getData('https://jsonplaceholder.typicode.com/posts')
-    yield
-        getData('https://jsonplaceholder.typicode.com/comments')
+
+function myGenerator() {
+    return (function *() {
+            getData('https://jsonplaceholder.typicode.com/users');
+        yield
+            getData('https://jsonplaceholder.typicode.com/posts');
+        yield
+            getData('https://jsonplaceholder.typicode.com/comments');
+    })();
 }
 
-var mygen = getDataGenerator();
-mygen.next()
+var mygen = myGenerator();
+mygen.next();
+
 
 
 
